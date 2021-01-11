@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigator</title>
+</head>
+<body>
+
+  <!--地図を表示する-->
+<div id="gmap" style="width:620px; height:400px"></div>
+
+<!-- js -->
+<script>
+function initMap() {
+// 地図を生成
+var gmap= new google.maps.Map(document.getElementById("gmap"), {
+zoom: 13,
+center: new google.maps.LatLng(38.305946, 140.852922, 13), //水の森公園
+mapTypeId: "roadmap"
+});
+//DirectionsServiceオブジェクトの生成
+var directionsService= new google.maps.DirectionsService();
+//DirectionsRendererオブジェクトの生成
+var directionsRenderer= new google.maps.DirectionsRenderer();
+//directionsRendererと地図を紐付け
+directionsRenderer.setMap(gmap);
+//起点の設定（Empire State Building 出発地点の緯度経度，仙台駅）
+var start = new google.maps.LatLng(38.259881, 140.882220);
+//終点の設定（Grand Central Station 到着地点の緯度経度，イオンスタイル仙台卸町）
+var end = new google.maps.LatLng(38.252298, 140.918784);
+// リクエストの設定
+var request = {
+origin: start, // 出発地点の緯度経度
+destination: end, // 到着地点の緯度経度
+// 経由地点がある場合には
+waypoints: [
+{ location: new google.maps.LatLng(38.249442, 140.905851) }
+],
+// travelMode: 'WALKING' //トラベルモード（歩き）
+travelMode: "DRIVING" //トラベルモード（自動車）
+};
+//ルートのリクエスト
+directionsService.route(request, function(result, status) {
+if (status === "OK") {
+directionsRenderer.setDirections(result); //結果表示
+} else {
+alert("failed: " + status);
+}
+});
+}
+</script>
+<script
+defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpC3KMR_TLfgqLnu_HRgGvKtpyowe30lI&callback=initMap"
+></script>
+  
+</body>
+</html>
